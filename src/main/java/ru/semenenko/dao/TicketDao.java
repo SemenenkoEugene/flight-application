@@ -18,7 +18,7 @@ public class TicketDao implements Dao<Long, Ticket> {
 
     private static final String SAVE_SQL = """
             INSERT INTO ticket
-            (passenger_no, passenger_name, flight_id, seat_no, cost) 
+            (passenger_no, passenger_name, flight_id, seat_no, cost)\s
             VALUES (?, ?, ?, ?, ?)
             """;
 
