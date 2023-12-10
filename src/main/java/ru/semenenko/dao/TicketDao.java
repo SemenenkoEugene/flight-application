@@ -35,9 +35,9 @@ public class TicketDao implements Dao<Long, Ticket> {
             """;
 
     private static final String FIND_BY_ID_SQL = FIND_ALL_SQL +
-                                                                """
-                                                                WHERE t.id = ?
-                                                                """;
+                                                 """
+                                                         WHERE t.id = ?
+                                                         """;
 
     private static final String UPDATE_SQL = """
             UPDATE ticket
@@ -49,11 +49,32 @@ public class TicketDao implements Dao<Long, Ticket> {
             WHERE id = ?
             """;
 
+    private static final String FIND_ALL_BY_FLIGHT_ID = FIND_ALL_SQL + """
+            WHERE t.flight_id = ?
+            """;
+
     private TicketDao() {
     }
 
     public static TicketDao getInstance() {
         return INSTANCE;
+    }
+
+    public List<Ticket> findAllByFlightId(Long id) {
+        try (Connection connection = ConnectionManager.get();
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_BY_FLIGHT_ID)) {
+            List<Ticket> tickets = new ArrayList<>();
+
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                tickets.add(buildTicket(resultSet));
+            }
+            return tickets;
+
+        } catch (SQLException e) {
+            throw new DaoException(e.getMessage());
+        }
     }
 
     public boolean update(Ticket ticket) {

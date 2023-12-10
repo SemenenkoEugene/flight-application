@@ -2,7 +2,6 @@ package ru.semenenko;
 
 import ru.semenenko.dao.FlightDao;
 import ru.semenenko.dao.TicketDao;
-import ru.semenenko.dto.TickerFilter;
 import ru.semenenko.entity.Flight;
 import ru.semenenko.entity.FlightStatus;
 import ru.semenenko.util.ConnectionManager;
