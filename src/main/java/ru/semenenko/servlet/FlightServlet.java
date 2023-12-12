@@ -1,7 +1,9 @@
 package ru.semenenko.servlet;
 
 import ru.semenenko.service.FlightService;
+import ru.semenenko.util.JspHelper;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,19 +18,22 @@ public class FlightServlet extends HttpServlet {
     private final FlightService flightService = FlightService.getInstance();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         resp.setContentType("text/html");
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
-        try (PrintWriter writer = resp.getWriter()) {
-            writer.write("<h1>Список перелетов:</h1>");
-            writer.write("<ul>");
-            flightService.findAll().forEach(flightDto ->
-                    writer.write("""
-                            <li>
-                            <a href='/tickets?flightId=%d'>%s</a>
-                            </li>""".formatted(flightDto.id(), flightDto.description())));
-            writer.write("</ul>");
-        }
+//        try (PrintWriter writer = resp.getWriter()) {
+//            writer.write("<h1>Список перелетов:</h1>");
+//            writer.write("<ul>");
+//            flightService.findAll().forEach(flightDto ->
+//                    writer.write("""
+//                            <li>
+//                            <a href='/tickets?flightId=%d'>%s</a>
+//                            </li>""".formatted(flightDto.id(), flightDto.description())));
+//            writer.write("</ul>");
+//        }
+
+        req.setAttribute("flights", flightService.findAll());
+        req.getRequestDispatcher(JspHelper.getPath("flights")).forward(req,resp);
     }
 }
